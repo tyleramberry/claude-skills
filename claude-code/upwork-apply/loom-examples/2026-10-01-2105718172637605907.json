@@ -1,0 +1,22 @@
+{
+  "title": "Flagged call to shipped fix",
+  "subtitle": "node-level debugging with full replay",
+  "nodes": [
+    {"id": "call", "label": "Flagged live call\nuser reported bad output", "col": 0, "row": 0.5},
+    {"id": "triage", "label": "Triage + reproduce\nisolate the node or\nstate transition", "col": 1, "row": 0.5, "style": "router"},
+    {"id": "fix", "label": "Fix at that node only\nprompt / state context /\ntransition threshold", "col": 2, "row": 0.5, "style": "core"},
+    {"id": "replay", "label": "Replay batch of\nhistorical test calls\n(NEW)", "col": 2, "row": 1.8, "style": "new"},
+    {"id": "ship", "label": "Ship to production\nonly on a clean replay", "col": 3, "row": 1.8, "style": "new"},
+    {"id": "route", "label": "Fix changes routing\nin a different node?", "col": 1, "row": 1.8, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "call", "to": "triage"},
+    {"from": "triage", "to": "fix"},
+    {"from": "fix", "to": "replay", "style": "new"},
+    {"from": "replay", "to": "ship", "style": "new"},
+    {"from": "replay", "to": "route", "style": "risk"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 1, "row": 2.7, "style": "risk"}
+  ]
+}
