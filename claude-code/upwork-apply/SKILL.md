@@ -24,6 +24,8 @@ Files in this folder:
   scoreboard. **Read it before every draft.**
 - `drafts/` — one file per drafted proposal: the AI draft and what was sent.
 - `learn.py` — diffs a draft file and prints kept % (`--trend` for all).
+- `loomkit.py` + `loom-examples/` — builds the Excalidraw whiteboard sketch
+  for each proposal's Loom from a small JSON spec (step 4b).
 
 ## Two modes
 
@@ -37,7 +39,7 @@ Files in this folder:
   2. Only if the gate returned new jobs: run 2 keyword `search` sets from
      step 1 (`limit: 5`) to get exact `proposal_count`s, then step 2 scoring.
   3. **At most 1–2 jobs** that clear the bar. For each, draft the proposal
-     (steps 4–5, preview only), then send one `PushNotification`:
+     and its Loom kit (steps 4, 4b, 5, preview only), then send one `PushNotification`:
      `Upwork: <title> · <budget> · <N> proposals · posted <M> min ago · bid <bid> · fit: <project>. "<first 2 lines of letter>" Reply yes to send.`
      End the run with the **full letter, bid, screening answers, Connects
      cost and boost call** as the final message so Tyler can approve in one
@@ -217,7 +219,7 @@ Rules the filled proposal must pass:
 3. **Length:** 2–3 short paragraphs, fits on a phone screen (~80–150 words).
 4. **End with ONE thing:** one sharp question about their project *or* one
    small piece of free value (a specific observation about their setup, or
-   "happy to send a 2-min Loom of how I'd wire this"). Never three
+   "happy to send a quick Loom of how I'd wire this"). Never three
    questions. Exception: when Tyler recorded a Loom, its link line sits
    above the question and both stay (L4).
 5. **Banned:** "I'm excited" as an opener (enthusiasm tied to *this* build
@@ -242,6 +244,38 @@ specific detail. No filler, no repeating the cover letter.
 client's number (first-reviews goal). Hourly → inside the client's posted
 range. Never far outside it. Profile rate is $45/hr. One-line reason; Tyler
 decides.
+
+## 4b. Loom kit (every drafted proposal; set 2026-10-01)
+
+Every proposal goes out with a Loom (L4), so build the kit right after the
+draft, in both modes (scan too):
+
+1. **Whiteboard sketch.** Write a spec to
+   `loom-examples/<YYYY-MM-DD>-<job id>.json` (copy
+   `loom-examples/2026-10-01-2105690002080338843.json` for the format), then
+   `python3 loomkit.py loom-examples/<file>.json` → writes
+   `~/Desktop/Upwork/<file>.excalidraw`. What goes on it:
+   - The client's system as they described it, in their own names (their
+     tools and channels, left → right: inputs → workflow → AI step → outputs).
+   - The thing being added in **green** (`new`).
+   - The spot where these builds usually break (the same one line 1 of the
+     letter names) in **red** (`risk`), with a note under it saying so.
+   - Only what's in the post. No invented components.
+2. **1-minute Loom script** (≈150 spoken words; Tyler wants 1 min, not 2).
+   Save it under `## Loom script` in the draft file. Five beats, each with
+   what to point at on the sketch:
+   - 0:00–0:10 hook: "Hi, I'm Tyler…" + their goal restated.
+   - 0:10–0:25 the approach, tracing the green path.
+   - 0:25–0:35 where it lands (their CRM / DB / outputs).
+   - 0:35–0:52 circle the red box: where it usually breaks and how he'd handle it.
+   - 0:52–1:00 close with the **same closer question** as the letter.
+3. **Open it for him.** There's no Mac app for `.excalidraw`: run
+   `open https://excalidraw.com` and `open -R <file>` and tell him to drag
+   the file onto the page (Shift+1 to fit). Recording tip: Loom Chrome
+   extension → Screen + Camera → **Current Tab** on the excalidraw tab (the
+   camera bubble stays on the tab where recording started).
+4. When he sends the link, add the Loom line (template slot) and re-run
+   `create`.
 
 ## 5. Preview, boost, approve
 

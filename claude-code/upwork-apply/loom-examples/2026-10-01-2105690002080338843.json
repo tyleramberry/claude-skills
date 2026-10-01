@@ -1,0 +1,33 @@
+{
+  "title": "GAEL + WhatsApp: the 4th channel",
+  "subtitle": "same engine, nothing rebuilt",
+  "nodes": [
+    {"id": "voice", "label": "Voice\nLiveKit + Deepgram + ElevenLabs", "col": 0, "row": 0},
+    {"id": "chat", "label": "Website chat widget", "col": 0, "row": 0.85},
+    {"id": "email", "label": "Email\nIMAP / SMTP", "col": 0, "row": 1.7},
+    {"id": "wa", "label": "WhatsApp (NEW)\nMeta Cloud API", "col": 0, "row": 2.7, "style": "new"},
+    {"id": "n8n", "label": "n8n workflow\nreads per-client config\n(no hardcoded numbers)", "col": 1, "row": 1.0, "style": "router"},
+    {"id": "claude", "label": "Claude\nclassify · score · route\n(same as email)", "col": 2, "row": 1.0, "style": "core"},
+    {"id": "ac", "label": "ActiveCampaign\nsame tags + nurture tracks", "col": 3, "row": 0.4},
+    {"id": "pg", "label": "PostgreSQL (EU)\nconversation log", "col": 3, "row": 1.7},
+    {"id": "follow", "label": "Follow-up scheduler\n+ thin-lead recovery", "col": 2, "row": 2.3},
+    {"id": "window", "label": "24-hour window?\nopen → normal reply\nclosed → approved template", "col": 2, "row": 3.5, "style": "risk"},
+    {"id": "fail", "label": "Send failed?\n→ alert (Slack / email)", "col": 3, "row": 3.5, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "voice", "to": "n8n"},
+    {"from": "chat", "to": "n8n"},
+    {"from": "email", "to": "n8n"},
+    {"from": "wa", "to": "n8n", "style": "new"},
+    {"from": "n8n", "to": "claude"},
+    {"from": "claude", "to": "ac"},
+    {"from": "claude", "to": "pg"},
+    {"from": "claude", "to": "follow"},
+    {"from": "follow", "to": "window", "style": "risk"},
+    {"from": "window", "to": "wa", "style": "new", "label": "send on WhatsApp"},
+    {"from": "window", "to": "fail", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 2, "row": 4.3, "style": "risk"}
+  ]
+}
