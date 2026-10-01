@@ -32,12 +32,23 @@ Files in this folder:
 - **Full run** (Tyler asks: "/upwork-apply", "find me jobs"): steps 1–8,
   up to ~5 jobs on the shortlist.
 - **Scan** (scheduled, or "scan Upwork"). See "Scan schedule & cost" below.
-  1. **Cheap gate first:** one `smart_search` only (`mode: most_recent`,
-     `verified_payment_only: true`, `limit: 10`, `from_date` = now − the
-     window). Drop ids already in `seen-jobs.txt`. **Nothing left → stop
-     immediately.** No keyword searches, no `get`, no notification.
-  2. Only if the gate returned new jobs: run 2 keyword `search` sets from
-     step 1 (`limit: 5`) to get exact `proposal_count`s, then step 2 scoring.
+  1. **Wide gate (changed 2026-10-01):** run these 4 calls in parallel,
+     all `verified_payment_only: true`, `limit: 10`:
+     - `smart_search` (`mode: most_recent`, `from_date` = now − the window)
+     - `search` `title: "n8n"`, `sort: recency`
+     - `search` `title: "AI agent"`, `sort: recency`
+     - `search` `title: "chatbot"`, `sort: recency`
+     Keep only rows whose `published_date` is inside the window, dedupe by
+     id, drop `applied: true` and ids in `seen-jobs.txt`. **Nothing left →
+     stop immediately.** No `get`, no notification.
+     Why: on 2026-10-01 the recommendations call (`smart_search`) alone
+     returned 5 jobs in 3 peak hours. The keyword searches found 5+
+     relevant ones in that window that it never returned. `search` rows
+     also carry exact `proposal_count`s, so the skip check needs no
+     extra call. (`automation` was left out on purpose: it mostly returns
+     Power Automate / test-automation noise.)
+  2. Apply the step 2 hard skips straight from the gate rows (age,
+     proposal count, budget floor). Only survivors get `get` + scoring.
   3. **At most 1–2 jobs** that clear the bar. For each, draft the proposal
      and its Loom kit (steps 4, 4b, 5, preview only), then send one `PushNotification`:
      `Upwork: <title> · <budget> · <N> proposals · posted <M> min ago · bid <bid> · fit: <project>. "<first 2 lines of letter>" Reply yes to send.`
@@ -55,7 +66,8 @@ Files in this folder:
 - Scheduled tasks: `upwork-scan-peak` and `upwork-scan-offpeak` in
   `~/.claude/scheduled-tasks/`. The scan itself runs in a **Sonnet**
   subagent; drafting stays in that same subagent (templates keep quality).
-- Cost lever is the gate: most scans should end after one small call.
+- Cost lever is the gate: most scans should end after the 4 parallel
+  gate calls.
   Upwork searches cost no Connects; Connects only move on an approved submit.
 
 ## Why speed and filtering matter (the playbook this skill follows)
