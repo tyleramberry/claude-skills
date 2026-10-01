@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hypothesis Doc — [[CLIENT_NAME]]</title>
+<style>
+  /* Fonts are self-hosted (base64) rather than loaded from Google Fonts. Headless
+     Chrome's --print-to-pdf does not reliably wait for network web-font requests to
+     finish before rasterizing, which silently falls back to a serif system font on
+     any element whose font-family rule doesn't also list a fallback. Embedding the
+     woff2 files directly removes the race condition entirely. */
+  @font-face{
+    font-family:"Bebas Neue";
+    src:url(data:font/woff2;base64,[[BEBAS_B64]]) format("woff2");
+    font-weight:400;
+    font-display:block;
+  }
+  @font-face{
+    font-family:"Oswald";
+    src:url(data:font/woff2;base64,[[OSWALD_B64]]) format("woff2");
+    font-weight:400 700;
+    font-display:block;
+  }
+  :root{
+    --paper:#ffffff;
+    --ink:#000000;
+    --purple:#461d7c;
+    --hero:#291244;
+    --void:#1e0a3c;
+    --card:#130624;
+    --gold:#f7c52d;
+    --purple-25:rgba(70,29,124,0.25);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @page{size:Letter;margin:0}
+  body{
+    font-family:"Oswald",-apple-system,"Helvetica Neue",Arial,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    font-weight:400;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{font-family:"Bebas Neue","Oswald",Impact,sans-serif;font-weight:700;text-transform:uppercase;line-height:0.98;letter-spacing:0.5px}
+  /* No min-height/flex-column here on purpose: a full case (3 hypotheses + 5 pain
+     points) can legitimately run past one page, and pinning a fixed page height fights
+     Chrome's print pagination — it strands trailing content alone on a mostly blank
+     second page. Let it flow instead. */
+  .page{width:8.5in;margin:0 auto;padding:0.45in 0.6in}
+
+  /* ---- nav ---- */
+  .nav{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--purple-25);padding-bottom:10px;margin-bottom:12px}
+  .nav img{height:40px;width:auto;display:block}
+  .nav .doctype{font-family:"Oswald";font-weight:700;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--purple)}
+
+  /* ---- title block ---- */
+  .eyebrow{font-family:"Oswald";font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1.6px;color:var(--purple);margin-bottom:6px}
+  h1.doc-title{font-size:34px;color:var(--ink);margin-bottom:4px}
+  .meta{font-size:12.5px;color:var(--ink);opacity:.72;margin-bottom:12px}
+
+  /* ---- section headers ---- */
+  h3.section{font-size:18px;color:var(--purple);margin-bottom:8px}
+
+  /* ---- pain points ---- */
+  .pain-card{margin-bottom:14px;page-break-inside:avoid}
+  .pain-card p.intro{font-size:12.5px;color:var(--ink);opacity:.75;margin-bottom:10px}
+  .pain-card ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .pain-card li{font-size:12.5px;padding-left:20px;position:relative;line-height:1.4;color:var(--ink)}
+  .pain-card li::before{content:"";position:absolute;left:0;top:6px;width:7px;height:7px;background:var(--purple);border-radius:99px}
+
+  /* ---- hypotheses ---- */
+  .hyp-intro{font-size:12.5px;color:var(--ink);opacity:.8;margin-bottom:6px}
+  .hyp{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--purple-25);page-break-inside:avoid}
+  .hyp:last-of-type{border-bottom:none}
+  .hyp .letter{font-family:"Bebas Neue";font-size:36px;color:var(--purple);line-height:.8;flex-shrink:0;width:36px}
+  .hyp .body h4{font-size:15px;color:var(--ink);margin-bottom:5px;text-transform:none;font-family:"Oswald",-apple-system,"Helvetica Neue",Arial,sans-serif;font-weight:700;letter-spacing:0}
+  .hyp .body .tag{display:inline-block;font-family:"Oswald",-apple-system,"Helvetica Neue",Arial,sans-serif;font-weight:700;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--purple);border:1px solid var(--purple);border-radius:99px;padding:2px 9px;margin-bottom:6px}
+  .hyp .body p.desc{font-size:12.5px;line-height:1.45;margin-bottom:5px}
+  .hyp .body p.roi{font-size:12px;font-weight:600;color:var(--purple)}
+
+  /* ---- next steps callout ---- */
+  .next-steps{margin-top:16px;border:1px solid var(--purple-25);padding:14px 18px;page-break-inside:avoid}
+  .next-steps h3.section{margin-bottom:6px}
+  .next-steps p{font-size:12.5px;line-height:1.45;margin-bottom:5px}
+  .next-steps p.timeline{font-weight:600;color:var(--purple)}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="nav">
+    <img src="data:image/png;base64,[[LOGO_B64]]" alt="Space Tiger AI Systems">
+    <span class="doctype">Hypothesis Doc · Internal</span>
+  </div>
+
+  <p class="eyebrow">Prepared for the Blueprint call</p>
+  <h1 class="doc-title">[[CLIENT_NAME]]</h1>
+  <p class="meta">[[INDUSTRY]] · [[DATE]] · Space Tiger team member: [[TEAM_MEMBER]]</p>
+
+  <div class="pain-card">
+    <h3 class="section">What We Heard</h3>
+    <p class="intro">Based on [[SOURCE_DESCRIPTION]], here's our understanding of where the client's time and energy is currently going:</p>
+    <ul>
+      [[PAIN_POINT_LIS]]
+    </ul>
+  </div>
+
+  <h3 class="section">Hypotheses</h3>
+  <p class="hyp-intro">One to three possible directions based on what we heard. These are starting points, not commitments — we'll refine or discard them on the call.</p>
+
+  [[HYPOTHESIS_BLOCKS]]
+
+  <div class="next-steps">
+    <h3 class="section">Next Steps</h3>
+    <p>We'll walk through these hypotheses together on the Blueprint call and pressure-test which direction makes the most sense for where the client is right now.</p>
+    [[TIMELINE_NOTE]]
+  </div>
+
+</div>
+</body>
+</html>
