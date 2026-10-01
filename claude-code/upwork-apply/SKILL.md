@@ -122,8 +122,11 @@ not Space Tiger client work, not agency work:
 - First person singular: "I built…", never "we" / "our team".
 - He applies as an **individual freelancer**. Don't pitch a team or agency
   capacity; Space Tiger (his FDE role) is background credibility only.
-- Don't call any portfolio project a client engagement. Call the two
-  **demo builds** demos.
+- Don't call any portfolio project a client engagement, and don't invent a
+  client or results for the two **demo builds**. But don't label them
+  "demo" in the letter either, and skip self-undercutting disclaimers like
+  "this would be my first X". Just say plainly what he built (L8, Tyler
+  2026-10-01).
 - The API only returns titles — don't state project details beyond this
   table and the profile overview unless Tyler supplies them.
 
@@ -148,7 +151,12 @@ Dedupe by id. Drop `applied: true`. In scan mode, drop ids in `seen-jobs.txt`.
 
 **Hard skips (drop before any `get`):**
 - Posted > 60 min ago (scan) / > 24 hrs (full run).
-- 10+ proposals already (exact count or tier "10 to 15" and above).
+- Too many proposals already. Default: 10+ (exact count or tier "10 to 15"
+  and above). **Exception (set 2026-10-01):** a job posted < 15 min ago
+  stays in up to 19 proposals (skip at 20+ / tier "20 to 50" and above)
+  if it's a strong fit to one Proof library project and the client is
+  solid (has hired, spend > $1k, good rating). AI/n8n jobs hit 10+
+  within minutes, so the old cutoff skipped nearly everything.
 - Payment not verified.
 - Budget below the floor: fixed < $150, or hourly max < $20/hr. (These are
   $5–$20 "test tasks" — noise.) Tyler can change this floor.
@@ -163,7 +171,7 @@ For survivors, `find_jobs get` (parallel) for `client_record`,
 | Factor | Strong | Weak |
 |---|---|---|
 | Age | < 5 min | 30–60 min |
-| Competition | 0–4 proposals | 5–9 |
+| Competition | 0–4 proposals | 5–9 (10–19 only via the < 15 min exception) |
 | Fit | concrete match to one Proof library project | only "AI expert" in general |
 | Client | has hired, hire rate ≥ 50%, spend > $1k, good freelancer reviews | new client, no spend (OK, just note it) |
 | Winnable w/o reviews | no JSS/Top Rated requirement, clear scope, entry/intermediate | "expert only", vague scope |
@@ -223,6 +231,8 @@ Rules the filled proposal must pass:
 8. Address the contact by name only if `client_feedback` names them.
 9. Voice: first person singular. Being the one person who builds it is a
    selling point; say so when it fits.
+10. No price quote or timeline line in the letter, even when the post asks
+   for one (L5). The bid field carries the rate; pricing is for the reply.
 
 **Screening questions** (clients filter on these *before* reading the
 letter): answer each in 1–3 sentences. Put the answer first, then one

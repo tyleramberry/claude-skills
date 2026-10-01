@@ -1,6 +1,6 @@
 # Proposal templates
 
-**v2 (2026-10-01)**. v1 was Claude-written. Each version folds in Tyler's
+**v3 (2026-10-01)**. v1 was Claude-written. Each version folds in Tyler's
 own edits (see `edit-lessons.md` and the changelog at the bottom), so the
 templates get more Tyler-written over time. The benchmark says human-written
 templates beat AI-written ones.
@@ -12,14 +12,14 @@ Slot guidance:
 - [proof] = one project from the Proof library, with its number if any
 - [approach] = 1–2 sentences, concrete, specific to their stack
 - [where it usually breaks] = the specific failure point for this kind of build, plus that you'd put the most care there (L1)
-- [Loom line] = only if Tyler recorded one: `Recorded a 2-min walkthrough of how I'd wire this: <link>`. Otherwise delete the line (L4)
+- [Loom line] = only if Tyler recorded one: `Recorded a quick walkthrough of how I'd wire this: <link>`. Otherwise delete the line (L4)
 - [closer] = ONE question, OR one free observation / Loom offer
 
 ---
 
 ## A. n8n / Make automation
 
-[Their problem → outcome, e.g. "Getting every new Typeform lead into HubSpot, scored and assigned, without anyone copy-pasting."] This is exactly the kind of automation I like building, and I know where these usually break: [where it usually breaks]. That's where I'd put the most care, and I can have it running in your account this week.
+[Their problem → outcome, e.g. "Getting every new Typeform lead into HubSpot, scored and assigned, without anyone copy-pasting."] This is exactly the kind of automation I like building, and I know where these usually break: [where it usually breaks]. That's where I'd put the most care, and I can have it running in your account ASAP.
 
 I recently built [proof]. For yours I'd [approach], with an error alert to Slack or email so nothing fails silently. You own the workflow and every key.
 
@@ -84,3 +84,7 @@ I built [proof] end to end (Next.js, Supabase, Stripe, Claude). For this I'd [ap
   clause from para 2 (C1, applied in B only because that's where it was seen).
   Only B was actually edited by Tyler. A, C and D got the same pattern
   because he stated L1 as a general rule; watch their first edits.
+- **v3 (2026-10-01):** From the 10-01 "Add WhatsApp Channel to GAEL" edit
+  (kept 85%). A: "this week" → "ASAP" (L6). All: Loom line "2-min" →
+  "quick" (L7). No quote/timeline line even when the post asks (L5, a step 4
+  rule, not template text).
