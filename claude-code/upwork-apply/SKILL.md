@@ -153,12 +153,14 @@ Dedupe by id. Drop `applied: true`. In scan mode, drop ids in `seen-jobs.txt`.
 
 **Hard skips (drop before any `get`):**
 - Posted > 60 min ago (scan) / > 24 hrs (full run).
-- Too many proposals already. Default: 10+ (exact count or tier "10 to 15"
-  and above). **Exception (set 2026-10-01):** a job posted < 15 min ago
-  stays in up to 19 proposals (skip at 20+ / tier "20 to 50" and above)
-  if it's a strong fit to one Proof library project and the client is
-  solid (has hired, spend > $1k, good rating). AI/n8n jobs hit 10+
-  within minutes, so the old cutoff skipped nearly everything.
+- Too many proposals already. Default: 20+ (raised from 10+ by Tyler,
+  2026-10-01). **Exception:** a job posted < 15 min ago stays in up to 29
+  proposals (skip at 30+; was 20+) if it's a strong fit to one Proof
+  library project and the client is solid (has hired, spend > $1k, good
+  rating). AI/n8n jobs hit 25–300 proposals within 30–90 min, so the
+  lower cutoffs skipped nearly everything. Tier "20 to 50" is ambiguous at
+  these lines: get the exact `proposal_count` from a keyword `search` row
+  before skipping or keeping it; tier "50+" is always a skip.
 - Payment not verified.
 - Budget below the floor: fixed < $150, or hourly max < $20/hr. (These are
   $5–$20 "test tasks" — noise.) Tyler can change this floor.
@@ -173,7 +175,7 @@ For survivors, `find_jobs get` (parallel) for `client_record`,
 | Factor | Strong | Weak |
 |---|---|---|
 | Age | < 5 min | 30–60 min |
-| Competition | 0–4 proposals | 5–9 (10–19 only via the < 15 min exception) |
+| Competition | 0–4 proposals | 10–19 (20–29 only via the < 15 min exception) |
 | Fit | concrete match to one Proof library project | only "AI expert" in general |
 | Client | has hired, hire rate ≥ 50%, spend > $1k, good freelancer reviews | new client, no spend (OK, just note it) |
 | Winnable w/o reviews | no JSS/Top Rated requirement, clear scope, entry/intermediate | "expert only", vague scope |
