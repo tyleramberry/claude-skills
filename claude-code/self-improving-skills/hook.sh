@@ -22,9 +22,13 @@ fi
 STAMP="$DIR/.runs/last-edit"
 mkdir -p "$DIR/.runs"
 NOW=$(date +%s); echo "$NOW $SKILL" > "$STAMP"
-(
-  sleep 30
-  [ "$(cut -d' ' -f1 "$STAMP")" = "$NOW" ] || exit 0
-  "$HOME/claude-skills/sync.sh" "Update skill: $SKILL" >> "$DIR/.runs/sync.log" 2>&1
-) >/dev/null 2>&1 &
+# New session so the delayed push survives the hook process exiting.
+python3 - "$STAMP" "$NOW" "$SKILL" "$DIR/.runs/sync.log" <<'EOF'
+import subprocess, sys
+stamp, now, skill, log = sys.argv[1:]
+script = f'sleep 30; [ "$(cut -d" " -f1 "{stamp}")" = "{now}" ] || exit 0; ' \
+         f'echo "== $(date) {skill}"; "$HOME/claude-skills/sync.sh" "Update skill: {skill}"'
+subprocess.Popen(["sh", "-c", script], stdout=open(log, "a"), stderr=subprocess.STDOUT,
+                 stdin=subprocess.DEVNULL, start_new_session=True)
+EOF
 exit 0
