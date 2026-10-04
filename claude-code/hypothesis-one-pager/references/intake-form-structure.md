@@ -2,9 +2,9 @@
 
 Space Tiger's client intake form ("Space Tiger Blueprint Intake Form"). Per the
 microsite flow, this goes out to the client after they pay for the Blueprint Process —
-so it may or may not exist yet for a given client at the point this skill runs. Treat
-it as a **second input when available**, not a hard requirement — the first-call
-transcript alone is enough to draft a Hypothesis Doc.
+so it may or may not exist yet for a given client at the point this skill runs. It is
+a valid **standalone input** — an intake form alone is enough to draft a Hypothesis
+Doc, and is the usual case. A first-call transcript is the optional second input.
 
 ## Sections
 
@@ -37,9 +37,12 @@ transcript alone is enough to draft a Hypothesis Doc.
   answers as the more precise/structured source — lead with it for Pain Points
   (Sections 5, 2, 6) and the Timeline note (Section 7). Use the transcript to fill
   gaps, add color, or catch things the client didn't think to write down.
-- When only the transcript exists (the common case today, since the intake form goes
-  out later in the funnel): fall back entirely to `first-call-structure.md`'s mapping.
-  Don't block on a missing intake form.
+- When only the transcript exists: fall back entirely to `first-call-structure.md`'s
+  mapping. Don't block on a missing intake form.
+- When only the intake form exists (the usual case): use the section mapping above
+  alone — Section 5 (+2, 6) for Pain Points, Section 7 for the Timeline note, Section 3
+  for the existing stack. Don't ask for a transcript. Expect no hour counts (see the
+  ROI rule in SKILL.md step 4) and no explicit "trigger" answer; read Section 6 for it.
 - Client Information block: Section 1's primary contact name is who "completed" the
   intake form when one exists. Without an intake form, use whoever ran/took notes on
   the first call instead (see SKILL.md step 2).

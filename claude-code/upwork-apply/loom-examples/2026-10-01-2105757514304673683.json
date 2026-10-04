@@ -1,0 +1,27 @@
+{
+  "title": "Automotive site chatbot: ask, capture, book",
+  "subtitle": "grounded on your inventory, handed to your CRM",
+  "nodes": [
+    {"id": "site", "label": "Your website\n(desktop + mobile)", "col": 0, "row": 0.8},
+    {"id": "inv", "label": "Vehicle inventory\n+ pricing + FAQs\n+ policies", "col": 0, "row": 2.2},
+    {"id": "bot", "label": "AI chatbot (NEW)\nvehicles · service · financing\ntrade-ins · warranties", "col": 1, "row": 0.8, "style": "new"},
+    {"id": "ground", "label": "Answers come only from\nyour inventory + policies", "col": 1, "row": 2.2, "style": "risk"},
+    {"id": "lead", "label": "Lead capture (NEW)\nname · phone · email\nvehicle they asked about", "col": 2, "row": 0.2, "style": "new"},
+    {"id": "book", "label": "Booking (NEW)\ntest drive · service\nquote request", "col": 2, "row": 1.4, "style": "new"},
+    {"id": "human", "label": "Can't answer?\nhand off to your sales team", "col": 2, "row": 2.6},
+    {"id": "crm", "label": "Your CRM / lead system", "col": 3, "row": 0.8}
+  ],
+  "edges": [
+    {"from": "site", "to": "bot", "style": "new"},
+    {"from": "inv", "to": "ground", "style": "risk"},
+    {"from": "ground", "to": "bot", "style": "risk"},
+    {"from": "bot", "to": "lead", "style": "new"},
+    {"from": "bot", "to": "book", "style": "new"},
+    {"from": "bot", "to": "human"},
+    {"from": "lead", "to": "crm"},
+    {"from": "book", "to": "crm"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break: stale or invented inventory and prices", "col": 1, "row": 3.4, "style": "risk"}
+  ]
+}

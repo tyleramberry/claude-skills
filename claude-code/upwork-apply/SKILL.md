@@ -109,7 +109,7 @@ action=list_highlights` — re-pull if a run finds new ones). Pass the id as
 | Project | id | Best match for | Proof number |
 |---|---|---|---|
 | Custom agent team for grant writing & RFP creation | 2103166593015046144 | multi-agent systems, RFP/document drafting, research agents | 4 agents, every output human-approved |
-| Sundae AI — agent-guided weekly planning SaaS (Next.js, Supabase, Claude, Stripe, GCal) | 2103162144569778176 | full-stack AI apps, SaaS MVPs, scheduling, Stripe | live + paid (ask Tyler for user count) |
+| Sundae AI — agent-guided weekly planning SaaS (Next.js, Supabase, Claude, Stripe, GCal) | 2103162144569778176 | full-stack AI apps, SaaS MVPs, scheduling, Stripe; **production agent systems / agent audits / tool-calling safety** (L10) | live + paid (ask Tyler for user count) |
 | OmniLegislation — 24/7 AI bill & court-ruling monitoring | 2104649267097460736 | monitoring/alert agents, scraping + summaries, legal/gov/compliance | 24/7 monitoring |
 | OGE — AI wargaming platform with RAG advisors for universities | 2104650545526939648 | RAG, knowledge-base chat, edtech | — |
 | Fastyr AI — frontend for an AI sales automation platform | 2104651755762417664 | React/Next.js frontends for AI products, sales tools | — |

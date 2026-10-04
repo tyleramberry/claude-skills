@@ -1,0 +1,30 @@
+{
+  "title": "RAG chatbot inside your web app",
+  "subtitle": "answers only from your data",
+  "nodes": [
+    {"id": "docs", "label": "Documents", "col": 0, "row": 0},
+    {"id": "site", "label": "Website content", "col": 0, "row": 0.85},
+    {"id": "dbr", "label": "Database records\nMySQL / PostgreSQL", "col": 0, "row": 1.7},
+    {"id": "ing", "label": "Ingestion (NEW)\nchunk + embed", "col": 1, "row": 0.85, "style": "new"},
+    {"id": "vec", "label": "Vector search (NEW)\npgvector / Pinecone", "col": 2, "row": 0.85, "style": "new"},
+    {"id": "api", "label": "Node.js / Laravel API (NEW)\nretrieve + LLM call", "col": 2, "row": 1.9, "style": "new"},
+    {"id": "llm", "label": "LLM\nOpenAI / Claude", "col": 3, "row": 1.9, "style": "core"},
+    {"id": "chat", "label": "React chat (NEW)\nstreaming + history\nin your web app", "col": 3, "row": 0.4, "style": "new"},
+    {"id": "admin", "label": "Admin panel (NEW)\nupload docs · conversation logs", "col": 1, "row": 2.9, "style": "new"},
+    {"id": "risk", "label": "Confident answer from\nthe wrong chunk\n→ cite sources, say 'I don't know'", "col": 3, "row": 3.1, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "docs", "to": "ing", "style": "new"},
+    {"from": "site", "to": "ing", "style": "new"},
+    {"from": "dbr", "to": "ing", "style": "new"},
+    {"from": "ing", "to": "vec", "style": "new"},
+    {"from": "vec", "to": "api", "style": "new"},
+    {"from": "api", "to": "llm", "style": "new"},
+    {"from": "api", "to": "chat", "style": "new"},
+    {"from": "admin", "to": "ing", "style": "new"},
+    {"from": "llm", "to": "risk", "style": "risk"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 3, "row": 4.0, "style": "risk"}
+  ]
+}

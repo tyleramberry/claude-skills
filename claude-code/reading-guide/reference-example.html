@@ -1,0 +1,442 @@
+<title>Regression &amp; Elasticity Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,750&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column styled like a clean spreadsheet workbook — cell-letter eyebrows, ledger grid, live charts. */
+:root{
+  --bg:#f5f7f9; --surface:#ffffff; --ink:#15232f; --muted:#5b6b78; --line:#d9e1e7; --grid:#e9eef2;
+  --accent:#0f6e8c; --accent-soft:#dcedf3; --good:#1f8a5b; --good-soft:#dff1e8; --warn:#b7791f; --warn-soft:#f8ecd6; --bad:#b4413a; --bad-soft:#f6e1df;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f171d; --surface:#16222b; --ink:#e3ebf0; --muted:#93a4b1; --line:#2a3a46; --grid:#1f2d37;
+  --accent:#4fb3d4; --accent-soft:#163543; --good:#4cc38a; --good-soft:#15362a; --warn:#e2a64a; --warn-soft:#3a2d16; --bad:#ec7a70; --bad-soft:#3d1f1d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f171d; --surface:#16222b; --ink:#e3ebf0; --muted:#93a4b1; --line:#2a3a46; --grid:#1f2d37;
+  --accent:#4fb3d4; --accent-soft:#163543; --good:#4cc38a; --good-soft:#15362a; --warn:#e2a64a; --warn-soft:#3a2d16; --bad:#ec7a70; --bad-soft:#3d1f1d; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:17px/1.6 var(--body);padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:780px;margin:0 auto}
+header{padding-block:40px 20px}
+h1{font:750 clamp(30px,5vw,44px)/1.1 var(--display);margin:0 0 10px;text-wrap:balance;letter-spacing:-.01em}
+h2{font:700 26px/1.2 var(--display);margin:0 0 6px;text-wrap:balance}
+h3{font:700 18px/1.3 var(--body);margin:18px 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+.lede{color:var(--muted);font-size:18px}
+.cell{font:600 12px/1 var(--mono);letter-spacing:.06em;color:var(--accent);text-transform:uppercase;display:inline-flex;gap:8px;align-items:center;margin-bottom:8px}
+.cell b{background:var(--accent-soft);padding:4px 6px;border-radius:3px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav a{font:600 13px var(--body);color:var(--muted);text-decoration:none;padding:5px 10px;border:1px solid var(--line);border-radius:999px;white-space:nowrap;background:var(--surface)}
+nav a:hover,nav a:focus-visible{color:var(--accent);border-color:var(--accent);outline:none}
+section{padding-block:36px 8px;border-top:1px solid var(--line);margin-top:28px}
+.formula{font:600 17px/1.5 var(--mono);background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:nowrap}
+.formula small{display:block;font:400 13px var(--body);color:var(--muted);white-space:normal}
+.key{background:var(--accent-soft);border-radius:8px;padding:12px 16px;margin:14px 0}
+.key strong{color:var(--accent)}
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin:14px 0}
+.fig-cap{font-size:14px;color:var(--muted);margin-top:6px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.axis{stroke:var(--line)} .gridl{stroke:var(--grid)}
+.dot{fill:var(--accent)} .fitline{stroke:var(--ink);stroke-width:2}
+.resid{stroke:var(--bad);stroke-dasharray:3 3;stroke-width:1.5}
+.controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:10px;font-size:15px}
+.controls label{display:flex;gap:8px;align-items:center;flex:1 1 240px}
+input[type=range]{flex:1;accent-color:var(--accent)}
+button{font:600 14px var(--body);background:var(--accent);color:var(--surface);border:0;border-radius:6px;padding:8px 14px;cursor:pointer}
+button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.readout{font:600 14px/1.5 var(--mono);display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px}
+.pill{display:inline-block;font:700 12px var(--body);padding:2px 9px;border-radius:999px;letter-spacing:.03em;text-transform:uppercase}
+.pill.good{background:var(--good-soft);color:var(--good)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.bad{background:var(--bad-soft);color:var(--bad)}
+.tbl{overflow-x:auto;margin:12px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;font-variant-numeric:tabular-nums}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--grid);font-weight:700;font-size:13px}
+td.num{font-family:var(--mono);text-align:right;white-space:nowrap}
+tr.dim td{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.bars{display:grid;gap:10px}
+.bar-row{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center;font-size:14px}
+.bar-track{display:flex;height:30px;border-radius:4px;overflow:hidden}
+.bar-seg{display:flex;align-items:center;padding-left:8px;font:600 12px var(--mono);color:var(--surface);white-space:nowrap;overflow:hidden}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:16px 0}
+.flow span{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-weight:600;font-size:14px}
+.flow i{color:var(--accent);font-style:normal;font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid2>*{min-width:0}
+@media (max-width:620px){.grid2{grid-template-columns:1fr}.bar-row{grid-template-columns:1fr}}
+.callouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0}
+.callout{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px}
+.callout b{display:block;font:600 12px var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.callout .v{font:700 20px var(--mono);color:var(--ink)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:10px 0}
+summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none}
+summary::before{content:"+";display:inline-block;width:20px;color:var(--accent);font-family:var(--mono)}
+details[open] summary::before{content:"−"}
+details .ans{padding:0 16px 14px 36px;border-top:1px dashed var(--line);padding-top:10px}
+.tag{font:600 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-left:6px}
+ul.tight{margin:6px 0 12px;padding-left:20px} ul.tight li{margin:3px 0}
+.case{border:1px solid var(--line);border-radius:8px;padding:12px 16px;margin:14px 0;background:var(--surface)}
+.case h4{margin:0 0 4px;font:700 15px var(--body)}
+.case p{font-size:15px;margin:0}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="cell"><b>STRAT 402</b> Baye &amp; Prince · Ch. 1 (pp. 20–29) + Ch. 3 (pp. 88–95)</div>
+  <h1>Regression &amp; Elasticity Guide</h1>
+  <p class="lede">The reading in one chain: use data to estimate a demand equation, check whether you can trust it, turn it into elasticities, and use those to make a yes/no or pricing call.</p>
+  <div class="flow"><span>Data</span><i>→</i><span>Regression</span><i>→</i><span>Is it significant?</span><i>→</i><span>Demand equation</span><i>→</i><span>Elasticity</span><i>→</i><span>Decision</span></div>
+</header>
+
+<nav aria-label="Sections">
+  <a href="#incremental">Incremental</a><a href="#regression">Regression</a><a href="#significance">t, P, CI</a><a href="#multi">Log &amp; multiple</a><a href="#elasticity">Elasticity</a><a href="#linear">Linear demand</a><a href="#loglinear">Log-linear</a><a href="#demand">Putting it together</a><a href="#practice">Practice</a><a href="#cheat">Cheat sheet</a>
+</nav>
+
+<!-- 1 -->
+<section id="incremental">
+  <div class="cell"><b>A1</b> Concept 1</div>
+  <h2>Incremental decisions: only count what changes</h2>
+  <p>For a thumbs-up/thumbs-down call, compare <strong>incremental revenue</strong> (extra revenue the project brings in) to <strong>incremental cost</strong> (extra cost it causes). Costs that stay the same either way are irrelevant, even if they're big.</p>
+  <div class="formula">Adopt if  ΔRevenue &gt; ΔCost</div>
+  <div class="fig">
+    <h3 style="margin-top:0">Slick Drilling: should we drill at Twin Lakes?</h3>
+    <div class="bars">
+      <div class="bar-row"><span>Incremental revenue</span><div class="bar-track"><div class="bar-seg" style="width:100%;background:var(--good)">$183,200</div></div></div>
+      <div class="bar-row"><span>Incremental cost</span><div class="bar-track"><div class="bar-seg" style="width:49.1%;background:var(--bad)">Augers $90k</div><div class="bar-seg" style="width:40.9%;background:var(--warn)">Temps $75k</div><div class="bar-seg" style="width:10%;background:transparent;color:var(--good);border:2px dashed var(--good)">+18.2k</div></div></div>
+    </div>
+    <div class="tbl"><table>
+      <tr><th>Line item</th><th>Before</th><th>After</th><th>Change</th></tr>
+      <tr><td>Revenue</td><td class="num">1,740,400</td><td class="num">1,923,600</td><td class="num">+183,200</td></tr>
+      <tr><td>Variable costs (augers + temps)</td><td class="num">1,250,000</td><td class="num">1,415,000</td><td class="num">+165,000</td></tr>
+      <tr class="dim"><td>Depreciation (direct fixed)</td><td class="num">120,000</td><td class="num">120,000</td><td class="num">0</td></tr>
+      <tr class="dim"><td>Supervisors + supplies (indirect fixed)</td><td class="num">270,000</td><td class="num">270,000</td><td class="num">0</td></tr>
+      <tr><th>Profit</th><th class="num">100,400</th><th class="num">118,600</th><th class="num">+18,200</th></tr>
+    </table></div>
+    <div class="fig-cap">Crossed-out rows don't change, so they don't matter. Verdict: thumbs up, +$18,200.</div>
+  </div>
+  <p>Same logic applies unit by unit: if the 1st unit has MB &gt; MC but the 2nd has MB &lt; MC, stop at one.</p>
+</section>
+
+<!-- 2 -->
+<section id="regression">
+  <div class="cell"><b>B1</b> Concept 2</div>
+  <h2>Regression: the best-fit line through messy data</h2>
+  <p>Real data never sits on a perfect line. We assume a true relationship plus random noise, then let software pick the line that makes the <strong>sum of squared errors</strong> (the red dashed gaps, squared and added up) as small as possible. That's <strong>least squares</strong>.</p>
+  <div class="formula">True:  Y = a + bX + e<small>a, b unknown; e = random error with mean zero</small></div>
+  <div class="formula">Estimated:  Ŷ = â + b̂X<small>â, b̂ = parameter estimates (the "hats" mean estimated from data)</small></div>
+  <div class="fig">
+    <h3 style="margin-top:0">Try it: TVs sold vs price at 10 Pittsburgh outlets</h3>
+    <svg id="scatter" viewBox="0 0 640 330" role="img" aria-label="Scatter of TV quantity against price with an adjustable line"></svg>
+    <div class="controls">
+      <label for="slope">Slope b <input id="slope" type="range" min="-5" max="0" step="0.01" value="-0.8"></label>
+      <button id="fitBtn" type="button">Animate to best fit</button>
+    </div>
+    <div class="readout" id="sseOut"></div>
+    <div class="fig-cap">Drag the slope. The squared-error total bottoms out at b = −2.60. That's the line Excel reports: <strong>Q = 1631.47 − 2.60P</strong>. Read it as: each $1 price increase sells about 2.6 fewer TVs.</div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="significance">
+  <div class="cell"><b>C1</b> Concept 3</div>
+  <h2>Can you trust the number? t-stat, P-value, confidence interval</h2>
+  <p>The coefficient is an <em>estimate</em>. A different sample would give a slightly different number. The <strong>standard error</strong> measures how much it would bounce around. Everything else is built from estimate ÷ SE.</p>
+  <p>Here's the TV price row from the Excel output, decoded:</p>
+  <div class="callouts">
+    <div class="callout"><b>Coefficient</b><span class="v">−2.60</span><br>Best guess of the slope</div>
+    <div class="callout"><b>Std. error</b><span class="v">0.53</span><br>How wobbly the guess is</div>
+    <div class="callout"><b>t-stat</b><span class="v">−4.89</span><br>= −2.60 ÷ 0.53. |t| ≥ 2 means significant</div>
+    <div class="callout"><b>P-value</b><span class="v">0.0012</span><br>12-in-10,000 chance of a result this big if the true effect were 0</div>
+    <div class="callout"><b>95% CI</b><span class="v">[−3.82, −1.37]</span><br>True slope is in here, 95% confident</div>
+  </div>
+  <div class="formula">t = b̂ / σ<sub>b̂</sub>      95% CI ≈ b̂ ± 2σ<sub>b̂</sub><small>Rules of thumb. |t| &gt; 2, P ≤ 0.05, or a CI that excludes zero all tell you the same thing: the effect is real (statistically different from 0). Rule-of-thumb CI for TV price: −2.60 ± 1.06 = [−3.66, −1.54], close to Excel's exact [−3.82, −1.37].</small></div>
+  <div class="fig">
+    <h3 style="margin-top:0">The fastest check: does the interval cross zero?</h3>
+    <svg id="forest" viewBox="0 0 640 250" role="img" aria-label="Confidence intervals for four coefficients relative to zero"></svg>
+    <div class="fig-cap">Each row is on its own scale; the vertical line is zero. If the bar crosses zero, you can't rule out "no effect."</div>
+  </div>
+  <p><strong>R-square</strong> (0.75 for TVs) = share of the variation in Q the line explains. The F-test (Significance F) asks whether the model as a whole explains anything. Same reading: small = good.</p>
+</section>
+
+<!-- 4 -->
+<section id="multi">
+  <div class="cell"><b>D1</b> Concept 4</div>
+  <h2>Curved data and multiple variables</h2>
+  <div class="grid2">
+    <div>
+      <h3>Log-linear: straighten a curve</h3>
+      <p>If the scatter curves, take the natural log of Y and X first, then run the same regression.</p>
+      <div class="formula" style="font-size:14px">ln Y = β₀ + β₁ ln X + e</div>
+    </div>
+    <div>
+      <h3>Multiple regression: more than one X</h3>
+      <p>Same tool, more explanatory variables. Each coefficient is the effect of that variable <em>holding the others constant</em>. Need more observations than parameters.</p>
+      <div class="formula" style="font-size:14px">Y = a + b₁X₁ + b₂X₂ + … + e</div>
+    </div>
+  </div>
+  <div class="fig">
+    <svg id="logfig" viewBox="0 0 640 220" role="img" aria-label="A curved demand relationship becomes a straight line after taking logs"></svg>
+    <div class="fig-cap">Same data, two views. Left: Q vs P curves. Right: ln Q vs ln P is a straight line, so ordinary regression works.</div>
+  </div>
+  <div class="key"><strong>Caveat from the book:</strong> econometrics takes years to master (endogeneity, heteroskedasticity, etc.). Your job as a manager is to read and question the output, and lean on specialists to produce it.</div>
+</section>
+
+<!-- 5 -->
+<section id="elasticity">
+  <div class="cell"><b>E1</b> Concept 5</div>
+  <h2>Elasticity: % response to a % change</h2>
+  <p>An elasticity tells you how much demand moves, in percent, when something else moves 1 percent. It's unit-free, so you can compare across products.</p>
+  <div class="formula">E<sub>Q,G</sub> = %ΔQ / %ΔG<small>G = whatever you change: own price, a rival's price, income, advertising</small></div>
+  <div class="tbl"><table>
+    <tr><th>Elasticity</th><th>Changes</th><th>Sign tells you</th></tr>
+    <tr><td>Own price</td><td>Your price</td><td>|E| &gt; 1 <span class="pill warn">elastic</span> raising price cuts revenue · |E| &lt; 1 <span class="pill good">inelastic</span> raising price raises revenue</td></tr>
+    <tr><td>Cross-price</td><td>Price of good Y</td><td>+ substitutes · − complements</td></tr>
+    <tr><td>Income</td><td>Consumer income</td><td>+ normal good · − inferior good</td></tr>
+    <tr><td>Own advertising</td><td>Your ad spend</td><td>+ ads lift demand; size says how much</td></tr>
+    <tr><td>Cross-advertising</td><td>Ad spend on good Y</td><td>Effect of a rival's/related ads on you</td></tr>
+  </table></div>
+  <div class="case">
+    <h4>Real case: statin ads (Sinkinson &amp; Starc, 2019)</h4>
+    <p>Advertising elasticity is 0.32 for the top brand (Crestor) and 0.10 for #2 (Lipitor). For #2, a 10% ad increase lifts demand only 1%. Both are positive but under 1, so ads help, with diminishing bang for the buck.</p>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="linear">
+  <div class="cell"><b>F1</b> Concept 6</div>
+  <h2>Elasticity from a linear demand equation</h2>
+  <div class="formula">Q = α₀ + α<sub>X</sub>P<sub>X</sub> + α<sub>Y</sub>P<sub>Y</sub> + α<sub>M</sub>M + α<sub>H</sub>H<br>E = (coefficient) × (variable ÷ Q)<small>Own price: E = α<sub>X</sub> · P<sub>X</sub>/Q. Cross: α<sub>Y</sub> · P<sub>Y</sub>/Q. Income: α<sub>M</sub> · M/Q.</small></div>
+  <p><strong>Elasticity is not the slope.</strong> On a straight demand line the slope is constant, but elasticity changes as you move along it: inelastic at low prices, elastic at high prices, unit-elastic at the midpoint where revenue peaks.</p>
+  <div class="fig">
+    <h3 style="margin-top:0">Slide the price along the TV demand curve</h3>
+    <div class="grid2">
+      <svg id="demand" viewBox="0 0 320 260" role="img" aria-label="Linear demand curve with elastic and inelastic zones"></svg>
+      <svg id="revenue" viewBox="0 0 320 260" role="img" aria-label="Total revenue as a function of price"></svg>
+    </div>
+    <div class="controls"><label for="price">Price $ <input id="price" type="range" min="40" max="600" step="5" value="400"></label></div>
+    <div class="readout" id="elOut"></div>
+    <div class="fig-cap">Q = 1631.47 − 2.60P. At P = $400, E = −1.76; at P = $500, E = −3.92 (book's two examples). Revenue peaks near $314, where E = −1.</div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="loglinear">
+  <div class="cell"><b>G1</b> Concept 7</div>
+  <h2>Elasticity from log-linear demand: just read the coefficient</h2>
+  <div class="formula">ln Q = β₀ + β<sub>X</sub> ln P<sub>X</sub> + β<sub>Y</sub> ln P<sub>Y</sub> + β<sub>M</sub> ln M + β<sub>H</sub> ln H<small>E<sub>own</sub> = β<sub>X</sub>, E<sub>cross</sub> = β<sub>Y</sub>, E<sub>income</sub> = β<sub>M</sub>. Constant everywhere on the curve; doesn't depend on P or Q.</small></div>
+  <div class="grid2">
+    <div class="callout"><b>Linear demand</b>Elasticity = coefficient × variable ÷ Q.<br>Changes along the curve. Must plug in P and Q.</div>
+    <div class="callout"><b>Log-linear demand</b>Elasticity = the coefficient itself.<br>Same at every point. No plugging in.</div>
+  </div>
+  <div class="case">
+    <h4>Real case: US gasoline (Hughes, Knittel &amp; Sperling, 2008)</h4>
+    <p>Log-linear estimates: price coefficient −0.04, income coefficient 0.53. A 10% price hike cuts quantity only 0.4% (very inelastic, so revenue rises). A 10% income rise lifts demand 5.3% (normal good).</p>
+  </div>
+</section>
+
+<!-- 8 -->
+<section id="demand">
+  <div class="cell"><b>H1</b> Concept 8</div>
+  <h2>Putting it together: FCI's empty apartments</h2>
+  <p>FCI owns 10 student buildings (100 units each) with ~50% vacancy. It regressed units rented on rent, advertising (in $100s), and miles from campus.</p>
+  <div class="formula">Q = 135.15 − 0.14P + 0.54A − 5.78D</div>
+  <div class="tbl"><table>
+    <tr><th>Variable</th><th>Coef.</th><th>t</th><th>P</th><th>Verdict</th><th>Meaning</th></tr>
+    <tr><td>Price</td><td class="num">−0.14</td><td class="num">−2.41</td><td class="num">0.050</td><td><span class="pill good">sig.</span></td><td>$100 rent cut → +14 units</td></tr>
+    <tr><td>Advertising</td><td class="num">0.54</td><td class="num">0.85</td><td class="num">0.430</td><td><span class="pill bad">not sig.</span></td><td>+$600 ads → ~3 units, but could be zero</td></tr>
+    <tr><td>Distance</td><td class="num">−5.78</td><td class="num">−4.61</td><td class="num">0.004</td><td><span class="pill good">sig.</span></td><td>Each mile out costs 2.7–8.9 renters</td></tr>
+  </table></div>
+  <div class="formula">E<sub>own</sub> at averages = −0.14 × 420 / 53.1 = −1.11<small>|E| &gt; 1, so demand is elastic. Raising rent lowers revenue; lowering rent raises it.</small></div>
+  <div class="key"><strong>Decision:</strong> can't move buildings, ads don't measurably work, so the lever is rent, and the elasticity says cut it.</div>
+  <div class="case">
+    <h4>Real case: King (Candy Crush) field experiment</h4>
+    <p>King randomly varied gold-bar discounts across 14M+ players for three months. Infrequent buyers were more price-elastic than frequent buyers, so discounts aimed at infrequent buyers grow revenue more. Randomized prices are the cleanest way to get a demand curve you can trust.</p>
+  </div>
+</section>
+
+<!-- 9 -->
+<section id="practice">
+  <div class="cell"><b>I1</b> Practice</div>
+  <h2>Work these, then check</h2>
+  <details><summary>Statin ad budget <span class="tag">Concept 5</span></summary><div class="ans">
+    <p>Top brand's ad elasticity is 0.32. How much must ads rise to lift demand 15%?</p>
+    <p>0.32 = 15% / %ΔA → %ΔA = 15 / 0.32 ≈ <strong>47%</strong>.</p></div></details>
+  <details><summary>Raincoats (log-linear) <span class="tag">Concept 7</span></summary><div class="ans">
+    <p>ln Q = … + 3 ln R − 2 ln A<sub>Y</sub>. Effect of +10% rainfall? Of −10% ads on good Y?</p>
+    <p>Rain: 3 × 10% = <strong>+30%</strong>. Ads on Y: −2 × (−10%) = <strong>+20%</strong>. Good Y is a competitor, likely umbrellas.</p></div></details>
+  <details><summary>Invigorated PED shoes (linear) <span class="tag">Concept 6</span></summary><div class="ans">
+    <p>Q<sub>X</sub> = 100 − 3P<sub>X</sub> + 4P<sub>Y</sub> − 0.01M + 2A<sub>X</sub>, with P<sub>X</sub> = 25, P<sub>Y</sub> = 35, M = 20,000, A<sub>X</sub> = 50.</p>
+    <p>Q = 100 − 75 + 140 − 200 + 100 = 65.</p>
+    <ul class="tight">
+      <li>Own: −3 × 25/65 = <strong>−1.15</strong> → elastic; a price hike lowers revenue</li>
+      <li>Cross: 4 × 35/65 = <strong>2.15</strong> → substitutes</li>
+      <li>Income: −0.01 × 20,000/65 = <strong>−3.08</strong> → inferior good</li>
+    </ul></div></details>
+  <details><summary>TV elasticity at two prices <span class="tag">Concept 6</span></summary><div class="ans">
+    <p>Q = 1631.47 − 2.60P. Find E at $400 and $500.</p>
+    <p>$400: Q = 591.5, E = −2.60 × 400/591.5 = <strong>−1.76</strong>. $500: Q = 331.5, E = −2.60 × 500/331.5 = <strong>−3.92</strong>. Higher price → more elastic.</p></div></details>
+  <details><summary>Read a row: is it significant? <span class="tag">Concept 3</span></summary><div class="ans">
+    <p>Coefficient 0.54, SE 0.64. Significant?</p>
+    <p>t = 0.54/0.64 = 0.85. |t| &lt; 2, and the CI [−1.02, 2.09] crosses zero → <strong>not significant</strong>. (This is FCI's advertising.)</p></div></details>
+  <details><summary>Incremental call <span class="tag">Concept 1</span></summary><div class="ans">
+    <p>A project adds $50k revenue, $30k materials, and you'd keep paying your $40k manager either way. Do it?</p>
+    <p>Incremental: +50k − 30k = <strong>+$20k → yes</strong>. The manager's salary is unchanged, so ignore it.</p></div></details>
+</section>
+
+<!-- 10 -->
+<section id="cheat">
+  <div class="cell"><b>J1</b> Cheat sheet</div>
+  <h2>Everything on one card</h2>
+  <div class="tbl"><table>
+    <tr><th>Tool</th><th>Formula / rule</th></tr>
+    <tr><td>Incremental decision</td><td>Yes if ΔR &gt; ΔC; ignore costs that don't change</td></tr>
+    <tr><td>Least squares</td><td>Pick â, b̂ to minimize Σ(error)²</td></tr>
+    <tr><td>t-statistic</td><td>b̂ / SE; |t| ≥ 2 → significant</td></tr>
+    <tr><td>P-value</td><td>≤ 0.05 → significant at 5%; lower = more confident</td></tr>
+    <tr><td>95% CI</td><td>≈ b̂ ± 2·SE; excludes 0 → significant</td></tr>
+    <tr><td>R²</td><td>Share of variation in Y explained (0–1)</td></tr>
+    <tr><td>Elasticity</td><td>%ΔQ / %ΔG → %ΔQ = E × %ΔG</td></tr>
+    <tr><td>Linear demand E</td><td>coefficient × (variable / Q); varies along curve</td></tr>
+    <tr><td>Log-linear demand E</td><td>the coefficient on ln(variable); constant</td></tr>
+    <tr><td>Own-price |E|</td><td>&gt; 1 elastic (cut price to raise revenue) · &lt; 1 inelastic (raise price)</td></tr>
+    <tr><td>Cross-price sign</td><td>+ substitutes · − complements</td></tr>
+    <tr><td>Income sign</td><td>+ normal · − inferior</td></tr>
+  </table></div>
+</section>
+</div>
+
+<script>
+(function(){
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e;}
+const reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fmt=(n,d=0)=>n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+
+/* ---------- Scatter / least squares ---------- */
+const data=[[475,180],[400,590],[450,430],[550,250],[575,275],[375,720],[375,660],[450,490],[400,700],[500,210]];
+const n=data.length, Pbar=data.reduce((s,d)=>s+d[0],0)/n, Qbar=data.reduce((s,d)=>s+d[1],0)/n;
+let sxy=0,sxx=0;data.forEach(([p,q])=>{sxy+=(p-Pbar)*(q-Qbar);sxx+=(p-Pbar)**2});
+const bBest=sxy/sxx;
+const sseFor=b=>{const a=Qbar-b*Pbar;return data.reduce((s,[p,q])=>s+(q-(a+b*p))**2,0)};
+const sseMin=sseFor(bBest);
+const sc=document.getElementById("scatter");
+const M={l:52,r:14,t:12,b:40},W=640,H=330;
+const xS=p=>M.l+(p-350)/(600-350)*(W-M.l-M.r), yS=q=>H-M.b-(q/800)*(H-M.t-M.b);
+for(let q=0;q<=800;q+=200){el("line",{x1:M.l,x2:W-M.r,y1:yS(q),y2:yS(q),class:"gridl"},sc);el("text",{x:M.l-8,y:yS(q)+4,"text-anchor":"end"},sc,q)}
+for(let p=350;p<=600;p+=50){el("text",{x:xS(p),y:H-M.b+16,"text-anchor":"middle"},sc,"$"+p)}
+el("line",{x1:M.l,x2:W-M.r,y1:H-M.b,y2:H-M.b,class:"axis"},sc);
+el("text",{x:(W+M.l)/2,y:H-4,"text-anchor":"middle"},sc,"Price (P)");
+el("text",{x:12,y:(H-M.b)/2,"text-anchor":"middle",transform:`rotate(-90 12 ${(H-M.b)/2})`},sc,"Quantity (Q)");
+const resid=data.map(()=>el("line",{class:"resid"},sc));
+const line=el("line",{class:"fitline"},sc);
+data.forEach(([p,q])=>el("circle",{cx:xS(p),cy:yS(q),r:5.5,class:"dot"},sc));
+const slope=document.getElementById("slope"), sseOut=document.getElementById("sseOut");
+function drawFit(b){
+  const a=Qbar-b*Pbar;
+  const clampY=q=>yS(Math.max(-40,Math.min(860,q)));
+  line.setAttribute("x1",xS(350));line.setAttribute("y1",clampY(a+b*350));
+  line.setAttribute("x2",xS(600));line.setAttribute("y2",clampY(a+b*600));
+  data.forEach(([p,q],i)=>{const r=resid[i];r.setAttribute("x1",xS(p));r.setAttribute("x2",xS(p));r.setAttribute("y1",yS(q));r.setAttribute("y2",clampY(a+b*p))});
+  const sse=sseFor(b), ratio=sse/sseMin;
+  const tag=ratio<1.01?'<span class="pill good">minimum</span>':ratio<1.5?'<span class="pill warn">close</span>':'<span class="pill bad">poor fit</span>';
+  sseOut.innerHTML=`<span>Q = ${fmt(a,1)} ${b<0?"−":"+"} ${fmt(Math.abs(b),2)}P</span><span>Σ squared errors = ${fmt(sse)}</span>${tag}`;
+}
+slope.addEventListener("input",()=>drawFit(+slope.value));
+document.getElementById("fitBtn").addEventListener("click",()=>{
+  const start=+slope.value,end=bBest;
+  if(reduce){slope.value=end;drawFit(end);return}
+  const t0=performance.now(),dur=1200;
+  (function step(t){const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3),b=start+(end-start)*e;slope.value=b;drawFit(b);if(k<1)requestAnimationFrame(step)})(t0);
+});
+drawFit(+slope.value);
+
+/* ---------- Forest plot ---------- */
+const rows=[
+  {name:"TV · Price",est:-2.60,lo:-3.82,hi:-1.37,p:"0.0012",span:5},
+  {name:"FCI · Price",est:-0.14,lo:-0.29,hi:0.00,p:"0.0500",span:0.4},
+  {name:"FCI · Advertising",est:0.54,lo:-1.02,hi:2.09,p:"0.4296",span:2.6},
+  {name:"FCI · Distance",est:-5.78,lo:-8.86,hi:-2.71,p:"0.0037",span:10}
+];
+const fo=document.getElementById("forest");
+const fx0=170,fx1=520,mid=(fx0+fx1)/2;
+el("text",{x:fx0,y:14},fo,"← negative");el("text",{x:fx1,y:14,"text-anchor":"end"},fo,"positive →");
+el("line",{x1:mid,x2:mid,y1:22,y2:240,class:"axis","stroke-width":2},fo);
+el("text",{x:mid,y:248,"text-anchor":"middle"},fo,"0");
+rows.forEach((r,i)=>{
+  const y=50+i*52, s=v=>mid+v/r.span*(fx1-fx0)/2;
+  const crosses=r.lo<0&&r.hi>0;
+  const color=crosses?"var(--bad)":(r.hi===0?"var(--warn)":"var(--good)");
+  el("text",{x:0,y:y+4,style:"fill:var(--ink);font-weight:600"},fo,r.name);
+  el("line",{x1:s(r.lo),x2:s(r.hi),y1:y,y2:y,stroke:color,"stroke-width":6,"stroke-linecap":"round"},fo);
+  el("circle",{cx:s(r.est),cy:y,r:6,fill:"var(--surface)",stroke:color,"stroke-width":3},fo);
+  el("text",{x:s(r.lo),y:y+20,"text-anchor":"middle"},fo,r.lo.toFixed(2));
+  el("text",{x:s(r.hi),y:y+20,"text-anchor":"middle"},fo,r.hi.toFixed(2));
+  const verdict=crosses?"not sig.":(r.hi===0?"borderline":"significant");
+  el("text",{x:540,y:y-2,style:`fill:${color};font-weight:600`},fo,verdict);
+  el("text",{x:540,y:y+13},fo,"P = "+r.p);
+});
+
+/* ---------- Log-linear figure ---------- */
+const lf=document.getElementById("logfig");
+function mini(ox,title,xs,ys,xl,yl){
+  const w=290,h=170,l=ox+36,t=24,xmin=Math.min(...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys);
+  const X=v=>l+(v-xmin)/(xmax-xmin)*(w-40), Y=v=>t+h-((v-ymin)/(ymax-ymin))*h;
+  el("text",{x:l,y:12,style:"fill:var(--ink);font-weight:600"},lf,title);
+  el("line",{x1:l,x2:l+w-40,y1:t+h,y2:t+h,class:"axis"},lf);el("line",{x1:l,x2:l,y1:t,y2:t+h,class:"axis"},lf);
+  el("text",{x:l+(w-40)/2,y:t+h+16,"text-anchor":"middle"},lf,xl);
+  el("text",{x:l-8,y:t+h/2,"text-anchor":"end"},lf,yl);
+  let d="";xs.forEach((x,i)=>{d+=(i?"L":"M")+X(x).toFixed(1)+" "+Y(ys[i]).toFixed(1)});
+  el("path",{d,fill:"none",stroke:"var(--accent)","stroke-width":2.5},lf);
+}
+const Ps=[],Qs=[];for(let p=2;p<=20;p+=0.5){Ps.push(p);Qs.push(1000*Math.pow(p,-1.5))}
+mini(0,"Q = c·P^β  (curved)",Ps,Qs,"P","Q");
+mini(330,"ln Q = β₀ + β ln P  (straight)",Ps.map(Math.log),Qs.map(Math.log),"ln P","ln Q");
+
+/* ---------- Linear demand elasticity ---------- */
+const A0=1631.47,B=2.60,Pmax=A0/B,Pmid=Pmax/2;
+const dm=document.getElementById("demand"),rv=document.getElementById("revenue");
+const dl=40,dr=10,dt=16,db=34,dw=320,dh=260;
+const dX=q=>dl+q/1700*(dw-dl-dr), dY=p=>dh-db-p/650*(dh-dt-db);
+el("rect",{x:dl,y:dY(650),width:dw-dl-dr,height:dY(Pmid)-dY(650),fill:"var(--warn-soft)"},dm);
+el("rect",{x:dl,y:dY(Pmid),width:dw-dl-dr,height:dY(0)-dY(Pmid),fill:"var(--good-soft)"},dm);
+el("text",{x:dw-dr-6,y:dY(600),"text-anchor":"end",style:"fill:var(--warn);font-weight:600"},dm,"ELASTIC |E|>1");
+el("text",{x:dw-dr-6,y:dY(40),"text-anchor":"end",style:"fill:var(--good);font-weight:600"},dm,"INELASTIC |E|<1");
+el("line",{x1:dl,x2:dw-dr,y1:dY(Pmid),y2:dY(Pmid),stroke:"var(--muted)","stroke-dasharray":"4 3"},dm);
+el("text",{x:dl+4,y:dY(Pmid)-4},dm,"|E|=1 at $314");
+el("line",{x1:dl,x2:dw-dr,y1:dh-db,y2:dh-db,class:"axis"},dm);el("line",{x1:dl,x2:dl,y1:dt,y2:dh-db,class:"axis"},dm);
+el("line",{x1:dX(0),y1:dY(Pmax),x2:dX(A0),y2:dY(0),stroke:"var(--ink)","stroke-width":2.5},dm);
+[0,200,400,600].forEach(p=>el("text",{x:dl-6,y:dY(p)+4,"text-anchor":"end"},dm,p));
+[0,500,1000,1500].forEach(q=>el("text",{x:dX(q),y:dh-db+14,"text-anchor":"middle"},dm,q));
+el("text",{x:(dw+dl)/2,y:dh-4,"text-anchor":"middle"},dm,"Quantity");
+el("text",{x:dl,y:10},dm,"Price");
+const dGuideH=el("line",{stroke:"var(--accent)","stroke-dasharray":"3 3"},dm),dGuideV=el("line",{stroke:"var(--accent)","stroke-dasharray":"3 3"},dm);
+const dPt=el("circle",{r:7,fill:"var(--accent)",stroke:"var(--surface)","stroke-width":2},dm);
+// revenue
+const TRmax=Pmid*(A0-B*Pmid);
+const rX=p=>dl+p/650*(dw-dl-dr), rY=r=>dh-db-r/(TRmax*1.1)*(dh-dt-db);
+el("line",{x1:dl,x2:dw-dr,y1:dh-db,y2:dh-db,class:"axis"},rv);el("line",{x1:dl,x2:dl,y1:dt,y2:dh-db,class:"axis"},rv);
+let rd="";for(let p=0;p<=Pmax;p+=5){rd+=(p?"L":"M")+rX(p).toFixed(1)+" "+rY(p*(A0-B*p)).toFixed(1)}
+el("path",{d:rd,fill:"none",stroke:"var(--ink)","stroke-width":2.5},rv);
+el("line",{x1:rX(Pmid),x2:rX(Pmid),y1:dt,y2:dh-db,stroke:"var(--muted)","stroke-dasharray":"4 3"},rv);
+el("text",{x:rX(Pmid)+4,y:dt+10},rv,"peak");
+[0,200,400,600].forEach(p=>el("text",{x:rX(p),y:dh-db+14,"text-anchor":"middle"},rv,"$"+p));
+el("text",{x:(dw+dl)/2,y:dh-4,"text-anchor":"middle"},rv,"Price");
+el("text",{x:dl,y:10},rv,"Total revenue (P×Q)");
+const rPt=el("circle",{r:7,fill:"var(--accent)",stroke:"var(--surface)","stroke-width":2},rv);
+const price=document.getElementById("price"),elOut=document.getElementById("elOut");
+function drawEl(){
+  const p=+price.value,q=A0-B*p,E=-B*p/q,tr=p*q;
+  dPt.setAttribute("cx",dX(q));dPt.setAttribute("cy",dY(p));
+  dGuideH.setAttribute("x1",dl);dGuideH.setAttribute("x2",dX(q));dGuideH.setAttribute("y1",dY(p));dGuideH.setAttribute("y2",dY(p));
+  dGuideV.setAttribute("x1",dX(q));dGuideV.setAttribute("x2",dX(q));dGuideV.setAttribute("y1",dY(p));dGuideV.setAttribute("y2",dh-db);
+  rPt.setAttribute("cx",rX(p));rPt.setAttribute("cy",rY(tr));
+  const ab=Math.abs(E);
+  const tag=ab>1.03?'<span class="pill warn">elastic → cut price to raise revenue</span>':ab<0.97?'<span class="pill good">inelastic → raise price to raise revenue</span>':'<span class="pill good">unit elastic → revenue maxed</span>';
+  elOut.innerHTML=`<span>P = $${p}</span><span>Q = ${fmt(q,1)}</span><span>E = −2.60 × ${p}/${fmt(q,1)} = ${E.toFixed(2)}</span><span>Revenue = $${fmt(tr)}</span>${tag}`;
+}
+price.addEventListener("input",drawEl);drawEl();
+})();
+</script>

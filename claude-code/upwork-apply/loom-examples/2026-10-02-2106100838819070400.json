@@ -1,0 +1,24 @@
+{
+  "title": "Agent MVP audit: what to fix first",
+  "subtitle": "architecture, MCP, security, evals, cost",
+  "nodes": [
+    {"id": "llm", "label": "LLM agent workflows\nexecution flow", "col": 0, "row": 0.5},
+    {"id": "tools", "label": "Tool calling\nstate / memory, retries", "col": 1, "row": 0.5},
+    {"id": "mcp", "label": "MCP servers / clients\nexternal APIs", "col": 2, "row": 0.5},
+    {"id": "be", "label": "Backend services", "col": 3, "row": 0.5},
+    {"id": "audit", "label": "Audit (NEW)\nread-through of agent loop,\ntools, logs, evals, cost", "col": 1, "row": 2.0, "style": "new"},
+    {"id": "rep", "label": "Concise report (NEW)\nfix first · risks · keep ·\npath to production", "col": 3, "row": 2.0, "style": "new"},
+    {"id": "perm", "label": "Tool permissions + untrusted\ntool output\n(prompt injection, over-scoped auth)", "col": 2, "row": 3.4, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "llm", "to": "tools"},
+    {"from": "tools", "to": "mcp"},
+    {"from": "mcp", "to": "be"},
+    {"from": "audit", "to": "rep", "style": "new"},
+    {"from": "audit", "to": "tools", "style": "new"},
+    {"from": "mcp", "to": "perm", "style": "risk"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 2, "row": 4.2, "style": "risk"}
+  ]
+}

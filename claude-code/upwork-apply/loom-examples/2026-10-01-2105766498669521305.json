@@ -1,0 +1,31 @@
+{
+  "title": "LiveAgent support AI: draft first, auto-send later",
+  "subtitle": "n8n + OpenAI, Shopify read-only, human approval in Phase 1",
+  "nodes": [
+    {"id": "la", "label": "LiveAgent\nincoming ticket", "col": 0, "row": 0.6},
+    {"id": "n8n", "label": "n8n workflow\nwebhook + ticket read", "col": 1, "row": 0.6, "style": "router"},
+    {"id": "cls", "label": "OpenAI (NEW)\nclassify the request", "col": 2, "row": 0.6, "style": "new"},
+    {"id": "kb", "label": "Manuals / policies /\nwebsite KB (NEW)\nretrieval with sources", "col": 3, "row": 0, "style": "new"},
+    {"id": "shop", "label": "Shopify Admin API\nread-only order lookup", "col": 3, "row": 1.2},
+    {"id": "risk", "label": "Answer from memory?\nstatus, spec or warranty\nnot in the data", "col": 2, "row": 2.0, "style": "risk"},
+    {"id": "draft", "label": "Draft reply (NEW)\ncited to source", "col": 2, "row": 3.2, "style": "new"},
+    {"id": "human", "label": "Human approval (Phase 1)\nrefunds · warranty · safety ·\nlow confidence always here", "col": 1, "row": 3.2, "style": "core"},
+    {"id": "auto", "label": "Auto-send later\nper category flag", "col": 3, "row": 3.2, "style": "new"},
+    {"id": "fail", "label": "Any failure\n→ alert (Slack / email)", "col": 0, "row": 3.2, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "la", "to": "n8n"},
+    {"from": "n8n", "to": "cls", "style": "new"},
+    {"from": "cls", "to": "kb", "style": "new"},
+    {"from": "cls", "to": "shop"},
+    {"from": "kb", "to": "risk", "style": "risk"},
+    {"from": "shop", "to": "risk", "style": "risk"},
+    {"from": "risk", "to": "draft", "style": "new"},
+    {"from": "draft", "to": "human", "style": "new"},
+    {"from": "draft", "to": "auto", "style": "new"},
+    {"from": "human", "to": "fail", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 2, "row": 2.65, "style": "risk"}
+  ]
+}

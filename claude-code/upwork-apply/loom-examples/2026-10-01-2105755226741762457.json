@@ -1,0 +1,24 @@
+{
+  "title": "Bland AI outbound agent: pilot to production",
+  "subtitle": "audit, fix, replay-test, then go live",
+  "nodes": [
+    {"id": "list", "label": "Prospect list\nlive outbound calls", "col": 0, "row": 0.5},
+    {"id": "bland", "label": "Bland AI sales agent\ncurrent pathways + prompts", "col": 1, "row": 0.5, "style": "core"},
+    {"id": "audit", "label": "Audit (NEW)\ncall recordings + pathway gaps", "col": 1, "row": 1.8, "style": "new"},
+    {"id": "fix", "label": "Refine sales flow (NEW)\nobjections · voicemail ·\nhandoff to a human", "col": 2, "row": 1.8, "style": "new"},
+    {"id": "replay", "label": "Test-call batch (NEW)\nrealistic prospect replies", "col": 3, "row": 1.8, "style": "new"},
+    {"id": "out", "label": "Outcome\nbooked / handed off / logged", "col": 3, "row": 0.5},
+    {"id": "risk", "label": "Off-script moment?\nreal objection · voicemail ·\n\"take me off your list\"", "col": 2, "row": 0.5, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "list", "to": "bland"},
+    {"from": "bland", "to": "risk", "style": "risk"},
+    {"from": "risk", "to": "out"},
+    {"from": "bland", "to": "audit", "style": "new"},
+    {"from": "audit", "to": "fix", "style": "new"},
+    {"from": "fix", "to": "replay", "style": "new"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 2, "row": 1.2, "style": "risk"}
+  ]
+}

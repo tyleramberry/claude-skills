@@ -1,0 +1,22 @@
+{
+  "title": "One AI feature inside your existing SaaS",
+  "subtitle": "no standalone chatbot",
+  "nodes": [
+    {"id": "fe", "label": "Your SaaS frontend\n(existing)", "col": 0, "row": 1},
+    {"id": "api", "label": "Python backend\nREST / FastAPI (existing)", "col": 1, "row": 1, "style": "router"},
+    {"id": "feat", "label": "AI feature (NEW)\nassistant / doc Q&A /\nrecommendation / agent flow", "col": 2, "row": 0.3, "style": "new"},
+    {"id": "llm", "label": "LLM API", "col": 3, "row": 0.3, "style": "core"},
+    {"id": "db", "label": "Your Postgres data\n(per customer account)", "col": 2, "row": 1.8},
+    {"id": "risk", "label": "Account scoping +\nslow / failed LLM calls", "col": 3, "row": 1.8, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "fe", "to": "api"},
+    {"from": "api", "to": "feat", "style": "new"},
+    {"from": "feat", "to": "llm", "style": "new"},
+    {"from": "feat", "to": "db"},
+    {"from": "db", "to": "risk", "style": "risk"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 3, "row": 2.6, "style": "risk"}
+  ]
+}
