@@ -1,0 +1,24 @@
+{
+  "title": "Retell AI + GoHighLevel brokerage lead flow",
+  "subtitle": "one lead flow, no copy-paste",
+  "nodes": [
+    {"id": "leads", "label": "Inbound leads\nREDEX / Sympana data", "col": 0, "row": 0},
+    {"id": "retell", "label": "Retell AI\nvoice calls", "col": 0, "row": 1.2},
+    {"id": "hook", "label": "Integration layer\nAPI + webhooks\nlead routing", "col": 1, "row": 0.6, "style": "new"},
+    {"id": "ghl", "label": "GoHighLevel\nLeadConnector\ncontacts + conversations", "col": 2, "row": 0.6, "style": "core"},
+    {"id": "team", "label": "Brokerage team\nfollow-ups + routing", "col": 3, "row": 0.6},
+    {"id": "dupe", "label": "Call-ended event\nduplicate or missed?\ndedupe on phone number", "col": 1, "row": 2.2, "style": "risk"},
+    {"id": "alert", "label": "Call didn't land?\n→ alert (Slack / email)", "col": 2, "row": 2.2, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "leads", "to": "hook", "style": "new"},
+    {"from": "retell", "to": "hook", "style": "new"},
+    {"from": "hook", "to": "ghl", "style": "new"},
+    {"from": "ghl", "to": "team"},
+    {"from": "hook", "to": "dupe", "style": "risk"},
+    {"from": "dupe", "to": "alert", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 1, "row": 3.0, "style": "risk"}
+  ]
+}

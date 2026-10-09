@@ -1,0 +1,24 @@
+{
+  "title": "Lead-gen chatbot: website + WhatsApp",
+  "subtitle": "one brain, two channels, calls booked",
+  "nodes": [
+    {"id": "web", "label": "Website visitor\nchat widget", "col": 0, "row": 0.3, "style": "new"},
+    {"id": "wa", "label": "WhatsApp\nenquiry", "col": 0, "row": 1.5, "style": "new"},
+    {"id": "brain", "label": "One shared chatbot brain\nanswers business questions\nasks qualifying questions", "col": 1, "row": 0.9, "style": "new"},
+    {"id": "crm", "label": "Lead record\nname · need · contact\n(CRM or sheet)", "col": 2, "row": 0.2, "style": "new"},
+    {"id": "cal", "label": "Calendar\nbooks the call", "col": 2, "row": 1.6, "style": "new"},
+    {"id": "confirm", "label": "Confirmation back\nto the lead", "col": 3, "row": 1.6, "style": "new"},
+    {"id": "risk", "label": "Chat to booking handoff\nlost details or double-booked slot", "col": 2, "row": 3.0, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "web", "to": "brain", "style": "new"},
+    {"from": "wa", "to": "brain", "style": "new"},
+    {"from": "brain", "to": "crm", "style": "new"},
+    {"from": "brain", "to": "cal", "style": "new"},
+    {"from": "cal", "to": "confirm", "style": "new"},
+    {"from": "cal", "to": "risk", "style": "risk"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 2, "row": 3.8, "style": "risk"}
+  ]
+}

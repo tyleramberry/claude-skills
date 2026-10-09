@@ -1,0 +1,26 @@
+{
+  "title": "Customer message to approved reply",
+  "subtitle": "Telegram first, then WhatsApp and X on the same approval core",
+  "nodes": [
+    {"id": "in", "label": "Telegram message\n(later WhatsApp, X)", "col": 0, "row": 1.0},
+    {"id": "n8n", "label": "n8n workflow\nintake + logging", "col": 1, "row": 1.0, "style": "router"},
+    {"id": "docs", "label": "Google Docs\nknowledge base", "col": 1, "row": 2.4},
+    {"id": "ai", "label": "AI draft\ngrounded in the doc", "col": 2, "row": 1.0, "style": "core"},
+    {"id": "appr", "label": "Private approval chat\nApprove / Edit / Reject", "col": 3, "row": 0.2, "style": "new"},
+    {"id": "send", "label": "Approved reply\nsent to customer", "col": 3, "row": 1.6, "style": "new"},
+    {"id": "gate", "label": "Draft sent before\napproval? never: Approve\nis the only send path", "col": 2, "row": 2.6, "style": "risk"},
+    {"id": "fail", "label": "Workflow error?\n→ alert", "col": 1, "row": 3.6, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "in", "to": "n8n"},
+    {"from": "docs", "to": "ai"},
+    {"from": "n8n", "to": "ai", "style": "new"},
+    {"from": "ai", "to": "appr", "style": "new"},
+    {"from": "appr", "to": "send", "style": "new"},
+    {"from": "ai", "to": "gate", "style": "risk"},
+    {"from": "n8n", "to": "fail", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break: a draft going out before approval, and stale doc answers", "col": 2, "row": 4.0, "style": "risk"}
+  ]
+}

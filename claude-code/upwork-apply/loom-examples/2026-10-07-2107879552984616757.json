@@ -1,0 +1,30 @@
+{
+  "title": "HubSpot: less manual work, AI in the loop",
+  "subtitle": "existing HubSpot setup, nothing rebuilt",
+  "nodes": [
+    {"id": "contacts", "label": "HubSpot contacts\n+ companies", "col": 0, "row": 0},
+    {"id": "deals", "label": "HubSpot deals\n+ activity", "col": 0, "row": 0.85},
+    {"id": "forms", "label": "Marketing Hub\nforms + leads", "col": 0, "row": 1.7},
+    {"id": "hook", "label": "HubSpot workflows\n+ webhooks", "col": 1, "row": 0.85, "style": "router"},
+    {"id": "n8n", "label": "n8n (NEW)\nroute · score · draft", "col": 2, "row": 0.85, "style": "new"},
+    {"id": "claude", "label": "Claude / Breeze AI (NEW)\nqualify · summarize\nsuggest next step", "col": 2, "row": 1.9, "style": "new"},
+    {"id": "owner", "label": "Lead owner assigned\n+ follow-up task", "col": 3, "row": 0.3, "style": "new"},
+    {"id": "draft", "label": "Draft email / note\nrep approves first", "col": 3, "row": 1.3, "style": "new"},
+    {"id": "dirty", "label": "Dirty CRM data?\nduplicates · wrong associations\n· stale deal stages", "col": 1, "row": 2.9, "style": "risk"},
+    {"id": "fail", "label": "Step failed?\n→ alert (Slack / email)", "col": 3, "row": 2.9, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "contacts", "to": "hook"},
+    {"from": "deals", "to": "hook"},
+    {"from": "forms", "to": "hook"},
+    {"from": "hook", "to": "n8n", "style": "new"},
+    {"from": "n8n", "to": "claude", "style": "new"},
+    {"from": "claude", "to": "owner", "style": "new"},
+    {"from": "claude", "to": "draft", "style": "new"},
+    {"from": "dirty", "to": "n8n", "style": "risk"},
+    {"from": "n8n", "to": "fail", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 1, "row": 3.7, "style": "risk"}
+  ]
+}

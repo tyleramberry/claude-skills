@@ -1,0 +1,26 @@
+{
+  "title": "Twin CDO V0: simple on purpose",
+  "subtitle": "fundraising conversation for Texas school districts",
+  "nodes": [
+    {"id": "user", "label": "School district leader\nmobile site, type or speak\n\"What are you working on?\"", "col": 0, "row": 0.6},
+    {"id": "auth", "label": "Login + org profile\nSupabase auth\nrow-level security per org", "col": 0, "row": 1.8, "style": "new"},
+    {"id": "app", "label": "Next.js app\nchat UI + speech-to-text\nprojects + action items", "col": 1, "row": 1.0, "style": "router"},
+    {"id": "openai", "label": "OpenAI API\nTwin CDO system prompt\none follow-up question at a time", "col": 2, "row": 1.0, "style": "core"},
+    {"id": "db", "label": "Supabase\nconversations · org memory\nprojects · helpful / not helpful", "col": 3, "row": 0.4},
+    {"id": "kb", "label": "Your knowledge base (NEW)\nmethodology · cases · playbooks\nadded through admin page", "col": 2, "row": 2.4, "style": "new"},
+    {"id": "admin", "label": "Admin page\nreview conversations\nedit instructions + playbooks", "col": 3, "row": 2.4},
+    {"id": "risk", "label": "Generic advice?\nanswer must draw on\nyour playbooks, not default AI", "col": 1, "row": 3.4, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "user", "to": "app"},
+    {"from": "auth", "to": "app", "style": "new"},
+    {"from": "app", "to": "openai"},
+    {"from": "openai", "to": "db"},
+    {"from": "kb", "to": "openai", "style": "new"},
+    {"from": "admin", "to": "kb", "style": "new"},
+    {"from": "openai", "to": "risk", "style": "risk"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 1, "row": 4.2, "style": "risk"}
+  ]
+}

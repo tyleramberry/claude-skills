@@ -1,0 +1,28 @@
+{
+  "title": "Property lead system",
+  "subtitle": "landing page to qualified, followed-up lead",
+  "nodes": [
+    {"id": "page", "label": "Property landing page\nNext.js + inquiry form", "col": 0, "row": 0, "style": "new"},
+    {"id": "out", "label": "Outbound leads\nadded to the system", "col": 0, "row": 2.0, "style": "new"},
+    {"id": "n8n", "label": "n8n workflow\nwebhook intake", "col": 1, "row": 1.0, "style": "router"},
+    {"id": "claude", "label": "Claude\ncategorize · qualify\npersonalize outreach", "col": 2, "row": 1.0, "style": "core"},
+    {"id": "db", "label": "Supabase / CRM\nlead + status", "col": 3, "row": 0.2, "style": "new"},
+    {"id": "welcome", "label": "Welcome email\n+ follow-up sequence", "col": 3, "row": 1.2, "style": "new"},
+    {"id": "team", "label": "Team notified\n+ human follow-up tasks", "col": 3, "row": 2.2},
+    {"id": "reply", "label": "Lead replies?\npause sequence\nupdate status", "col": 2, "row": 2.4, "style": "risk"},
+    {"id": "fail", "label": "Workflow error?\n→ alert (Slack / email)", "col": 2, "row": 3.4, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "page", "to": "n8n", "style": "new"},
+    {"from": "out", "to": "n8n", "style": "new"},
+    {"from": "n8n", "to": "claude"},
+    {"from": "claude", "to": "db", "style": "new"},
+    {"from": "claude", "to": "welcome", "style": "new"},
+    {"from": "welcome", "to": "reply", "style": "risk"},
+    {"from": "reply", "to": "team"},
+    {"from": "n8n", "to": "fail", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break: reply detection", "col": 2, "row": 4.0, "style": "risk"}
+  ]
+}

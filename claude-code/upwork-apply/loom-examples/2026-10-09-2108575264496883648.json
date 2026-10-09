@@ -1,0 +1,26 @@
+{
+  "title": "ERP + MCP server + approval-gated agents",
+  "subtitle": "read tools, gated write tools, every call logged",
+  "nodes": [
+    {"id": "mail", "label": "Emails", "col": 0, "row": 0},
+    {"id": "pdf", "label": "PDFs / order documents", "col": 0, "row": 0.85},
+    {"id": "sheet", "label": "Spreadsheets", "col": 0, "row": 1.7},
+    {"id": "agent", "label": "AI agent\nreads + drafts\n(Claude)", "col": 1, "row": 0.85, "style": "new"},
+    {"id": "mcp", "label": "Hosted MCP server (NEW)\nread tools | write tools\nper-agent permissions\nlog of every call", "col": 2, "row": 0.85, "style": "new"},
+    {"id": "erp", "label": "Your custom ERP\n(existing API)", "col": 3, "row": 0.85, "style": "core"},
+    {"id": "slack", "label": "Daily / weekly reports\nSlack or email", "col": 3, "row": 2.0},
+    {"id": "risk", "label": "Agent writes to live orders\nmisread PDF = wrong order\n-> team approval before write", "col": 2, "row": 2.3, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "mail", "to": "agent"},
+    {"from": "pdf", "to": "agent"},
+    {"from": "sheet", "to": "agent"},
+    {"from": "agent", "to": "mcp", "style": "new"},
+    {"from": "mcp", "to": "erp", "style": "new"},
+    {"from": "erp", "to": "slack"},
+    {"from": "mcp", "to": "risk", "style": "risk"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 2, "row": 3.2, "style": "risk"}
+  ]
+}

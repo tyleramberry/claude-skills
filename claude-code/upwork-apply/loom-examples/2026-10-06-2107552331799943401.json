@@ -1,0 +1,24 @@
+{
+  "title": "Research to blog post, on a schedule",
+  "subtitle": "n8n agent: news in, 200-400 word summary, posted to PayloadCMS",
+  "nodes": [
+    {"id": "sched", "label": "Schedule trigger\n(n8n)", "col": 0, "row": 1.0},
+    {"id": "news", "label": "News sources\nNewsAPI / Google News / RSS\nindustry + location", "col": 1, "row": 1.0, "style": "router"},
+    {"id": "ai", "label": "AI summary via OpenRouter\n200-400 words", "col": 2, "row": 1.0, "style": "core"},
+    {"id": "dedupe", "label": "Check against\nalready-posted stories", "col": 2, "row": 2.4, "style": "new"},
+    {"id": "post", "label": "Auto-post to\nPayloadCMS blog", "col": 3, "row": 1.0, "style": "new"},
+    {"id": "gate", "label": "Same story twice or\nthin source? Dedupe + skip\nweak stories first", "col": 3, "row": 2.6, "style": "risk"},
+    {"id": "fail", "label": "Workflow error?\n-> alert", "col": 1, "row": 3.6, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "sched", "to": "news"},
+    {"from": "news", "to": "ai", "style": "new"},
+    {"from": "ai", "to": "dedupe", "style": "new"},
+    {"from": "dedupe", "to": "post", "style": "new"},
+    {"from": "ai", "to": "gate", "style": "risk"},
+    {"from": "news", "to": "fail", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break: the same story posted twice, and thin sources giving summaries nobody should publish", "col": 2, "row": 4.0, "style": "risk"}
+  ]
+}

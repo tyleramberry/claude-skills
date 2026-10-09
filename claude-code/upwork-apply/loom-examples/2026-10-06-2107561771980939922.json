@@ -1,0 +1,26 @@
+{
+  "title": "Document-heavy operations: fewer manual touches per order",
+  "subtitle": "start with one high-impact workflow",
+  "nodes": [
+    {"id": "email", "label": "Customer support\nemail · live chat · calls", "col": 0, "row": 0},
+    {"id": "docs", "label": "Document intake\nOCR · classify · extract", "col": 0, "row": 1.2},
+    {"id": "orders", "label": "Order tracking\nfulfillment · admin", "col": 0, "row": 2.4},
+    {"id": "flow", "label": "Workflow automation\nrouting + rule-based calculations", "col": 1, "row": 1.2, "style": "router"},
+    {"id": "ai", "label": "AI processing\ntemplate-based doc generation", "col": 2, "row": 1.2, "style": "core"},
+    {"id": "review", "label": "External reviewers\napprovals · signatures · delivery", "col": 3, "row": 0.4},
+    {"id": "queue", "label": "Exception queue (NEW)\nconfidence checks + retries\nstaff only touch these", "col": 2, "row": 2.4, "style": "new"},
+    {"id": "bad", "label": "Bad extraction or failed integration\nslips through silently?", "col": 3, "row": 3.4, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "email", "to": "flow"},
+    {"from": "docs", "to": "flow"},
+    {"from": "orders", "to": "flow"},
+    {"from": "flow", "to": "ai"},
+    {"from": "ai", "to": "review"},
+    {"from": "ai", "to": "queue", "style": "new"},
+    {"from": "queue", "to": "bad", "style": "risk"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 3, "row": 4.2, "style": "risk"}
+  ]
+}

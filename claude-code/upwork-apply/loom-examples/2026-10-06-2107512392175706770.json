@@ -1,0 +1,26 @@
+{
+  "title": "WhatsApp support bot for your BigCommerce store",
+  "subtitle": "answers only from your approved FAQ + catalog",
+  "nodes": [
+    {"id": "cust", "label": "Customer on WhatsApp", "col": 0, "row": 0.6},
+    {"id": "wa", "label": "WhatsApp Business Platform\nMeta-compliant API / provider (NEW)", "col": 1, "row": 0.6, "style": "new"},
+    {"id": "hook", "label": "Webhook backend\n(NEW)", "col": 2, "row": 0.6, "style": "new"},
+    {"id": "rag", "label": "Retrieval over\nFAQ + product catalog\nshipping, returns, sizing (NEW)", "col": 3, "row": 0.0, "style": "new"},
+    {"id": "llm", "label": "LLM answers only from\nretrieved content (NEW)", "col": 3, "row": 1.2, "style": "new"},
+    {"id": "bc", "label": "BigCommerce\ncatalog export / API", "col": 4, "row": 0.0},
+    {"id": "gap", "label": "Answer not in the data?\navailability / sizing guesses", "col": 3, "row": 2.4, "style": "risk"},
+    {"id": "human", "label": "Polite fallback +\nhandover to your support team", "col": 4, "row": 2.4, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "cust", "to": "wa", "style": "new"},
+    {"from": "wa", "to": "hook", "style": "new"},
+    {"from": "hook", "to": "rag", "style": "new"},
+    {"from": "hook", "to": "llm", "style": "new"},
+    {"from": "bc", "to": "rag"},
+    {"from": "llm", "to": "gap", "style": "risk"},
+    {"from": "gap", "to": "human", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 3, "row": 3.2, "style": "risk"}
+  ]
+}

@@ -249,6 +249,11 @@ Rules the filled proposal must pass:
    selling point; say so when it fits.
 10. No price quote or timeline line in the letter, even when the post asks
    for one (L5). The bid field carries the rate; pricing is for the reply.
+   **Exception (L11), fixed-price only:** one price line. When the client's
+   budget is far below the real scope (other bids many times higher), pitch
+   `Phase 1, for your $<budget>` and `Phase 2, quoted separately once phase
+   1 is live`, and bid the budget. Match whatever Tyler says about price in
+   his Loom.
 
 **Screening questions** (clients filter on these *before* reading the
 letter): answer each in 1–3 sentences. Put the answer first, then one

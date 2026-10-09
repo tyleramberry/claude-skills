@@ -1,0 +1,28 @@
+{
+  "title": "Bid email to approved estimate",
+  "subtitle": "n8n + Claude + GoHighLevel: plans in, draft estimate out, estimator approves",
+  "nodes": [
+    {"id": "email", "label": "GC emails plan set\n+ spec PDFs", "col": 0, "row": 1.0},
+    {"id": "n8n", "label": "n8n workflow\ndetect email, pull PDFs", "col": 1, "row": 1.0, "style": "router"},
+    {"id": "ghl", "label": "GoHighLevel\ncontact + opportunity", "col": 1, "row": 2.4},
+    {"id": "claude", "label": "Claude reads plans/specs\nreturns JSON per field\n+ confidence", "col": 2, "row": 1.0, "style": "core"},
+    {"id": "price", "label": "Pricing rules applied in code\nrates, waste, markup, minimums", "col": 2, "row": 2.4, "style": "new"},
+    {"id": "draft", "label": "Draft estimate +\nbranded proposal PDF", "col": 3, "row": 1.0, "style": "new"},
+    {"id": "approve", "label": "Estimator approval\n-> GHL sends to customer", "col": 3, "row": 2.4, "style": "new"},
+    {"id": "gate", "label": "Quantities from plan PDFs:\nlow confidence or missing\n-> manual review", "col": 2, "row": 3.8, "style": "risk"},
+    {"id": "fail", "label": "Unreadable PDF or\nworkflow error -> alert", "col": 1, "row": 3.8, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "email", "to": "n8n"},
+    {"from": "n8n", "to": "ghl"},
+    {"from": "n8n", "to": "claude", "style": "new"},
+    {"from": "claude", "to": "price", "style": "new"},
+    {"from": "price", "to": "draft", "style": "new"},
+    {"from": "draft", "to": "approve", "style": "new"},
+    {"from": "claude", "to": "gate", "style": "risk"},
+    {"from": "n8n", "to": "fail", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break: quantities pulled from plan PDFs. A confident wrong number is worse than a flagged gap.", "col": 2, "row": 4.8, "style": "risk"}
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "title": "CallRail call to lead record",
+  "subtitle": "transcript to classified lead + follow-up SMS draft",
+  "nodes": [
+    {"id": "cr", "label": "CallRail\ncompleted call + transcript", "col": 0, "row": 1.0},
+    {"id": "make", "label": "Make.com scenario\nwebhook intake", "col": 1, "row": 1.0, "style": "router"},
+    {"id": "dup", "label": "Call ID already\nin Airtable? stop", "col": 1, "row": 2.4, "style": "risk"},
+    {"id": "ai", "label": "OpenAI\nclassify + extract\nstrict JSON schema", "col": 2, "row": 1.0, "style": "core"},
+    {"id": "at", "label": "Airtable\nlead record\nbooked / price / follow-up", "col": 3, "row": 0.2, "style": "new"},
+    {"id": "sms", "label": "Suggested follow-up SMS\nfor unbooked leads", "col": 3, "row": 1.6, "style": "new"},
+    {"id": "fail", "label": "Scenario error?\n→ alert (Slack / email)", "col": 2, "row": 3.4, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "cr", "to": "make"},
+    {"from": "make", "to": "dup", "style": "risk"},
+    {"from": "make", "to": "ai", "style": "new"},
+    {"from": "ai", "to": "at", "style": "new"},
+    {"from": "ai", "to": "sms", "style": "new"},
+    {"from": "make", "to": "fail", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break: loose AI output and double-processing", "col": 1, "row": 4.0, "style": "risk"}
+  ]
+}

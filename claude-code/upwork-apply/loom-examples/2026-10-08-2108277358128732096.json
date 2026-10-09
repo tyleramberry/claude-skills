@@ -1,0 +1,22 @@
+{
+  "title": "Lead qualification prototype",
+  "subtitle": "inquiry in, structured JSON out",
+  "nodes": [
+    {"id": "inq", "label": "Incoming inquiry\n(short lead message)", "col": 0, "row": 1.0, "style": "core"},
+    {"id": "api", "label": "FastAPI endpoint\n/ Python script", "col": 1, "row": 1.0, "style": "new"},
+    {"id": "llm", "label": "LLM step\nClaude or OpenAI API", "col": 2, "row": 0.2, "style": "new"},
+    {"id": "out", "label": "Structured JSON\ndetails · category · score\nsummary · suggested reply", "col": 3, "row": 0.2, "style": "new"},
+    {"id": "crm", "label": "Later: CRM / n8n\n(not in this scope)", "col": 4, "row": 0.2, "style": "core"},
+    {"id": "risk", "label": "Output drift\nscore or JSON shape changes\nbetween runs", "col": 2, "row": 2.2, "style": "risk"}
+  ],
+  "edges": [
+    {"from": "inq", "to": "api", "style": "new"},
+    {"from": "api", "to": "llm", "style": "new"},
+    {"from": "llm", "to": "out", "style": "new"},
+    {"from": "out", "to": "crm", "style": "core"},
+    {"from": "llm", "to": "risk", "style": "risk"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 2, "row": 3.0, "style": "risk"}
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Universal AI Phone Receptionist (HVAC first)",
+  "subtitle": "calls in, appointments booked, every trade is configuration",
+  "nodes": [
+    {"id": "caller", "label": "Caller\nHVAC business line", "col": 0, "row": 0.6},
+    {"id": "twilio", "label": "Twilio\nphone number", "col": 1, "row": 0.6},
+    {"id": "retell", "label": "Retell AI\nvoice agent\nqualify + answer questions", "col": 2, "row": 0.6, "style": "new"},
+    {"id": "n8n", "label": "n8n\ntool calls:\nbook / reschedule / cancel", "col": 3, "row": 0.6, "style": "new"},
+    {"id": "cal", "label": "Cal.com\navailability + bookings", "col": 4, "row": 0},
+    {"id": "db", "label": "Supabase + Google Sheets\ncalls, callers, bookings\nper-trade config", "col": 4, "row": 1.4},
+    {"id": "risk", "label": "Live booking step\ncaller vs calendar disagree?\nre-check Cal.com before every write", "col": 3, "row": 2.4, "style": "risk"},
+    {"id": "alert", "label": "Booking failed?\n→ alert owner", "col": 4, "row": 2.4, "style": "alert"}
+  ],
+  "edges": [
+    {"from": "caller", "to": "twilio"},
+    {"from": "twilio", "to": "retell", "style": "new"},
+    {"from": "retell", "to": "n8n", "style": "new"},
+    {"from": "n8n", "to": "cal", "style": "new"},
+    {"from": "n8n", "to": "db", "style": "new"},
+    {"from": "n8n", "to": "risk", "style": "risk"},
+    {"from": "risk", "to": "alert", "style": "alert"}
+  ],
+  "notes": [
+    {"text": "where these builds usually break", "col": 3, "row": 3.2, "style": "risk"}
+  ]
+}
